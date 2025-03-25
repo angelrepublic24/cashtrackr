@@ -1,5 +1,6 @@
 import RegisterForm from "@/components/auth/RegisterForm";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: 'Cashtrackr - Create Account',
@@ -14,6 +15,9 @@ export default function RegisterPage() {
         <span className="text-amber-500">finances</span>
       </p>
       <RegisterForm/>
+      <nav className="mt-10 flex flex-col space-y-4">
+        <Link className="text-center text-gray-500" href={'login'}>You already have an account, Sign In</Link>
+      </nav>
       
     </>
   );
