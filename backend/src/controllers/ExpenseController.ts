@@ -6,7 +6,7 @@ export class ExpenseController {
 
     static create = async(req: Request, res: Response)=>{
         try {
-            const expense = new Expense(req.body);
+            const expense = await Expense.create(req.body);
             expense.budgetId = req.budget.id
             await expense.save();
             res.status(201).json('Expense added successfully')
@@ -29,7 +29,7 @@ export class ExpenseController {
 
     static remove = async(req: Request, res: Response) =>{
         await req.expense.destroy();
-        res.json({message: "Expense has beeen deleted!"})
+        res.json({message: "Expense has been deleted!"})
     }
 }
 
