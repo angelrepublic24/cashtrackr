@@ -1,11 +1,20 @@
 'use client'
+
+import { useFormState } from "react-dom"
+
 export default function LoginForm() {
+
+    const [state, dispatch] = useFormState(login, {
+        errors: [],
+        success: '',
+    })
 
     return (
         <>
             <form
                 className="mt-14 space-y-5"
                 noValidate
+                action={dispatch}
             >
                 <div className="flex flex-col gap-2">
                     <label

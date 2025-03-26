@@ -11,7 +11,16 @@ export const RegisterSchema = z.object({
     path: ['password_confirmation']
 } )
 
+export const LoginSchema = z.object({
+    email: z.string().min(1, {message:"Email is required"}).email(),
+    password: z.string().min(6, {message: "The password is too short, min 6 characters"}),
+
+})
+
 export const SuccessSchema = z.string()
 export const ErrorResponseSchema = z.object({
     error: z.string()
 })
+
+export const TokenSchema = z.string({message: 'Token no valid'})
+                                    .length(6, {message: 'Token no valid'})

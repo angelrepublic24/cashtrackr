@@ -42,13 +42,13 @@ class AuthController {
 
     if (!user) {
       const error = new Error("Token is not valid");
-      res.status(401).json({ message: error });
+      res.status(401).json({error: error.message});
       return;
     }
     user.confirmed = true;
     user.token = null;
     await user.save();
-    res.json({ message: "Email has been confirmed!" });
+    res.json("Email has been confirmed!");
     return;
   };
 
