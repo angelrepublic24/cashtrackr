@@ -10,3 +10,8 @@ export const RegisterSchema = z.object({
     message: "The password don't match",
     path: ['password_confirmation']
 } )
+
+export const SuccessSchema = z.string()
+export const ErrorResponseSchema = z.object({
+    error: z.string()
+})

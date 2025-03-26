@@ -13,7 +13,7 @@ class AuthController {
 
       const userExist = await User.findOne({ where: { email: body.email } });
       if (userExist) {
-        res.status(409).json({ message: "User exist already" });
+        res.status(409).json({error: "User exist already"});
         return;
       }
 
@@ -27,7 +27,7 @@ class AuthController {
         email: user.email,
         token: user.token,
       });
-      res.json({ message: "User created" });
+      res.json("User created");
       return;
     } catch (error) {
       console.log(error);

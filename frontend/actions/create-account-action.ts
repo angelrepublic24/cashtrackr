@@ -1,9 +1,13 @@
 'use server'
 
 import { Global } from "@/src/global/Global";
-import { RegisterSchema } from "@/src/schemas"
+import { ErrorResponseSchema, RegisterSchema, SuccessSchema } from "@/src/schemas"
 
-export async function register(formData: FormData){
+type ActionStateType = {
+    errors: string[],
+    success: string
+}
+export async function register(prevState: ActionStateType, formData: FormData){
 
     const registerData = {
         email: formData.get('email'),
@@ -14,13 +18,16 @@ export async function register(formData: FormData){
 
     // Validate
     const register = RegisterSchema.safeParse(registerData)
-    const errors = register.error?.errors.map(error => error.message);
 
     if(!register.success){
-        return {}
+        const errors = register.error.errors.map(error => error.message);
+        return {
+            errors,
+            success: prevState.success 
+        }
     }
 
-    //
+    // Save to DB or API
     const url = `${Global.url}/auth/create-account`
     const request = await fetch(url, {
         method: 'POST',
@@ -33,7 +40,18 @@ export async function register(formData: FormData){
             password: register.data.password
         })
     })
-
+    console.log(request.status)
     const data = await request.json()
-    console.log(data);
+    if(request.status === 409){
+        const {error} = ErrorResponseSchema.parse(data);
+        return {
+            errors: [error],
+            success: ''
+        }
+    }
+    const success = SuccessSchema.parse(data)
+    return {
+        errors: [],
+        success
+    }
 }
