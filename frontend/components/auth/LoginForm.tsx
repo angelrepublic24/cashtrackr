@@ -1,13 +1,26 @@
 'use client'
 
+import authentication from "@/actions/authentication-action"
 import { useFormState } from "react-dom"
+import {useEffect} from "react"
+import { toast } from "react-toastify"
 
 export default function LoginForm() {
 
-    const [state, dispatch] = useFormState(login, {
+    const [state, dispatch] = useFormState(authentication, {
         errors: [],
         success: '',
     })
+
+    useEffect(() => {
+     if(state.errors){
+        state.errors.forEach(error => {
+            toast.error(error)
+        })
+     }
+    
+    }, [state])
+    
 
     return (
         <>

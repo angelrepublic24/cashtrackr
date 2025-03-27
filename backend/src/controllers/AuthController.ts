@@ -58,16 +58,16 @@ class AuthController {
 
       const user = await User.findOne({ where: { email: body.email } });
       if (!user) {
-        res.status(404).json({ message: "Email or password is not correct" });
+        res.status(404).json({ error: "User not found" });
         return;
       }
       if (!user.confirmed) {
-        res.status(403).json({ message: "This account is not confirmed" });
+        res.status(403).json({ error: "This account is not confirmed" });
         return
       }
       const isMatch = bcrypt.compareSync(body.password, user.password);
       if (!isMatch) {
-        res.status(401).send({ message: "Email or password is not correct" });
+        res.status(401).send({ error: "Email or password is not correct" });
         return;
       }
 
@@ -90,7 +90,7 @@ class AuthController {
 
     const user = await User.findOne({where: {email}});
     if(!user){
-      res.status(404).send({message: "user not found"})
+      res.status(404).json({error: "user not found"})
     }
     user.token = generateToken();
     await user.save()
@@ -100,7 +100,7 @@ class AuthController {
       email: user.email,
       token: user.token
     })
-    res.json({mesage: "Check you email to reset your password"})
+    res.json("Check you email to reset your password")
     } catch (error) {
       console.log(error);
       res.status(500).json({ error});
@@ -115,10 +115,10 @@ class AuthController {
       const tokenExist = await User.findOne({where: {token}});
   
       if(!tokenExist) {
-        res.status(404).send({message: "The token is not valid!"});
+        res.status(404).send({error: "The token is not validated!"});
         return;
       }
-      res.send({message: "Token valid...."})
+      res.json("Token has been valided")
     
     } catch (error) {
       console.log(error);
@@ -135,13 +135,13 @@ class AuthController {
     const user = await User.findOne({where: {token}});
   
     if(!user) {
-      res.status(404).send({message: "The token is not valid!"});
+      res.status(404).send({error: "The token is not valid!"});
       return;
     }
     user.password = await bcrypt.hash(password, 10);
     user.token = null;
     await user.save()
-    res.json({message: "The password has been modified!"})
+    res.json("The password has been modified!")
     return
     } catch (error) {
       res.status(500).send({error});
