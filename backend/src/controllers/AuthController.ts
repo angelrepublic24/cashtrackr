@@ -187,10 +187,10 @@ class AuthController {
 
       const isMatch = bcrypt.compareSync(password, user.password);
       if(!isMatch){
-        res.status(401).send({message: "The password is incorrect"});
+        res.status(401).json({error: "The password is incorrect"});
         return;
       }
-      res.json({message: "The password has been verified"});
+      res.json("The password has been verified");
       return;
     } catch (error) {
       console.log(error);

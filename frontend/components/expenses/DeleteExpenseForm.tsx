@@ -1,10 +1,9 @@
 import React from 'react'
 
-export default function NewBudgetPage() {
+export default function DeleteExpenseForm() {
   return (
     <div>
-      asss
+      
     </div>
   )
 }
-

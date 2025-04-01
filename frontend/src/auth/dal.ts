@@ -3,14 +3,15 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
 import { UserSchema } from "../schemas";
 import { cache } from "react";
+import getToken from './token';
 
 
 export const verifySession = cache( async () => {
 
-    const token = cookies().get('CASHTRACKR_TOKEN')?.value;
+    const token = getToken()
 
     if(!token) {
-        redirect('auth/login');
+        redirect('/auth/login');
     }
 
     const url = `${process.env.API_URL}/auth/user`;
@@ -24,7 +25,7 @@ export const verifySession = cache( async () => {
     const result = UserSchema.safeParse(session);
 
     if(!result.success){
-        redirect('auth/login');
+        redirect('/auth/login');
     }
 
     return {

@@ -6,11 +6,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 
-const metadata: Metadata = {
-  title: "CashTrackr - Admin Dashboard ",
-  description: "Admin Dashboard",
-}
-
 export default async function AdminLayout({
     children,
   }: Readonly<{
