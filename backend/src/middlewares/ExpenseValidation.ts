@@ -75,4 +75,13 @@ export class ExpenseValidation {
             });
           }
   }
+
+  static BelongsToBudget = async (req: Request, res: Response, next: NextFunction) => {
+    if(req.budget.id !== req.expense.budgetId){
+      res.status(403).json({message: 'Action not allowed'})
+      return;
+    }
+
+    next()
+  }
 }

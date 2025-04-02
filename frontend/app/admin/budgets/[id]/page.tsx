@@ -1,5 +1,7 @@
+import ProgressBar from "@/components/budgets/ProgressBar";
 import AddExpenseButton from "@/components/expenses/AddExpenseButton";
 import ExpenseMenu from "@/components/expenses/ExpenseMenu";
+import Amount from "@/components/ui/Amount";
 import ModalContainer from "@/components/ui/ModalContainer";
 import { getBudget } from "@/src/api/budgetApi";
 import { formatCurrency, formatDate } from "@/src/utils";
@@ -17,12 +19,12 @@ export async function generateMetadata({
     description: `View ${budget.name} budget`,
   };
 }
-export default async function BudgetDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function BudgetDetailsPage({  params,}: {params: { id: string };}) {
   const budget = await getBudget(params.id);
+
+  const totalSpent = budget.expense.reduce((total, expense) => +expense.amount + total, 0)
+  const available = +budget.amount - totalSpent;
+  const percentage = +((totalSpent / +budget.amount) * 100).toFixed(2);
 
   return (
     <>
@@ -37,6 +39,17 @@ export default async function BudgetDetailsPage({
       </div>
       {budget.expense.length ? (
         <>
+          <div className="grid grid-cols-1 md:grid-cols-2 mt-2">
+            <div>
+              <ProgressBar percentage={percentage} />
+            </div>
+            <div className="flex flex-col justify-center md: items-start gap-5">
+              <Amount label={"Budget"} amount={+budget.amount}/>
+              <Amount label={"Available"} amount={available}/>
+              <Amount label={"Expense"} amount={totalSpent}/>
+
+            </div>
+          </div>
           <h1 className="font-black text-4xl text-purple-950 mt-10">
             Expenses included in this budget
           </h1>

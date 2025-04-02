@@ -37,9 +37,21 @@ export const ResetPasswordSchema = z.object({
     path: ["password_confirmation"]
 });
 
+export const EditProfileSchema = z.object({
+    name: z.string().min(2, {message: "The name is required"} ),
+    email: z.string().min(1, {message:"Email is required"}).email(),
+})
 export const ConfirmPasswordSchema = z.string().min(1, {message: "The password must be at least 1 character"})
 
+export const ChangePaswordSchema = z.object({
+    current_password: z.string().min(1, {message: 'The password must be at least 6 characters'}),
+    password: z.string().min(1, {message: 'The password must be at least 6 characters'}),
+    password_confirmation: z.string()
 
+}).refine((data) => data.password === data.password_confirmation, {
+    message: "The passwords do not match",
+    path: ["password_confirmation"]
+});
 
 export const DraftBudgetSchema = z.object({
     name: z.string()
@@ -90,4 +102,5 @@ export type User = z.infer<typeof UserSchema>
 export type Budget = z.infer<typeof BudgetAPIResponseSchema>
 export type DraftExpense = z.infer<typeof DraftExpenseSchema>
 export type Expense = z.infer<typeof ExpenseAPIResponseSchema>
+export type Profile = z.infer<typeof EditProfileSchema>
 

@@ -40,7 +40,6 @@ export async function register(prevState: ActionStateType, formData: FormData){
             password: register.data.password
         })
     })
-    console.log(request.status)
     const data = await request.json()
     if(request.status === 409){
         const {error} = ErrorResponseSchema.parse(data);

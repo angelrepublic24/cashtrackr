@@ -16,7 +16,9 @@ router.param('budgetId', Validator.hasAccess)
 
 
 router.param('expenseId', ExpenseValidation.validateExpenseId);
-router.param('expenseId', ExpenseValidation.validateExpenseExist)
+router.param('expenseId', ExpenseValidation.validateExpenseExist);
+router.param('expenseId', ExpenseValidation.BelongsToBudget);
+
 
 
 

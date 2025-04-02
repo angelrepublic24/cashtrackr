@@ -20,5 +20,6 @@ router.post('/reset-password/:token', body("password").isLength({min: 6}).withMe
 router.get('/user', AuthValidator.VerifyToken, AuthController.user);
 router.post('/update-password', AuthValidator.VerifyToken, AuthValidator.validateUpdatePassword, handleInputErrors, AuthController.updateCurrentUserPassword);
 router.post('/check-password', AuthValidator.VerifyToken, body("password").notEmpty().withMessage("Password is not valid"), handleInputErrors, AuthController.checkPassword);
+router.patch('/update-account', AuthValidator.VerifyToken, AuthController.update)
 
 export default router

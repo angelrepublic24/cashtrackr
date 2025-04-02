@@ -163,14 +163,13 @@ class AuthController {
     const user = await User.findByPk(id);
 
     if(!bcrypt.compareSync(current_password, user.password)){
-      res.status(401).send({message: "The password is incorrect"});
+      const error = new Error("The password is incorrect")
+      res.status(401).json({error: error.message});
       return
     }
     user.password = bcrypt.hashSync(password, 10);
     await user.save();
-    res.json({
-      message: "Password updated!"
-    })
+    res.json( "Password updated!")
     return
 
     } catch (error) {
@@ -196,6 +195,29 @@ class AuthController {
       console.log(error);
       res.status(500).json({error})
     }
+  }
+
+  static update = async(req: Request, res: Response) => {
+    const {name, email} = req.body;
+   
+    try {
+      const existingUser = await User.findOne({where: {email}});
+
+      if(existingUser && existingUser.id !== req.user.id){
+        const error = new Error('This email is not available');
+        res.status(409).json({error: error.message})
+        return;
+      }
+
+      await User.update({name, email}, {where: {id: req.user.id}});
+      res.json("User updated!");
+      return
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({error: error.message});
+      return
+    }
+  
   }
 
 }
